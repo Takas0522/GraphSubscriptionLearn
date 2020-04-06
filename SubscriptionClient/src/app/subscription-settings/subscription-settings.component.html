@@ -1,0 +1,17 @@
+<div class="contents">
+    <ng-container *ngIf="!isLogin">
+        <button mat-flat-button color="primary" (click)="login()">
+            ログイン
+        </button>
+    </ng-container>
+    <ng-container *ngIf="isLogin">
+        <div>
+            <button mat-flat-button color="primary" (click)="subscribeSettings()">
+                Subscription
+            </button>
+        </div>
+        <div>
+            有効期限：{{expirationDateTime}}
+        </div>
+    </ng-container>
+</div>
