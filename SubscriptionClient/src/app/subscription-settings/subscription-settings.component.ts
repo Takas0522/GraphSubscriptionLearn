@@ -10,7 +10,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class SubscriptionSettingsComponent implements OnInit {
 
   isLogin = false;
-  expirationDateTime = '';
+  subscriptionDatas: { id: string, resource: string, changeType: string, expirationDateTime: Date }[] = [];
+  displayedColumns: string[] = ['resource', 'changeType', 'expirationDateTime', 'update', 'delete'];
 
   constructor(
     private msalService: MsalService,
@@ -21,6 +22,7 @@ export class SubscriptionSettingsComponent implements OnInit {
     this.msalService.loginState$.subscribe(x => {
       this.isLogin = (x.acccount !== null);
     });
+    this.getSubscriptionSettings();
   }
 
   login() {
@@ -45,7 +47,52 @@ export class SubscriptionSettingsComponent implements OnInit {
 
     return this.http.post('https://graph.microsoft.com/v1.0/subscriptions', subscription, { headers: header }).subscribe(res => {
       console.log(res);
-      this.expirationDateTime = setExpDateJson;
+      this.getSubscriptionSettings();
+    });
+  }
+
+  async getSubscriptionSettings() {
+    const token = await this.msalService.acquireTokenSilent();
+    const header: HttpHeaders = new HttpHeaders().append('Authorization', `Bearer ${token}`);
+
+    return this.http.get('https://graph.microsoft.com/v1.0/subscriptions',  { headers: header }).subscribe(res => {
+      const datas: any[] = (res as any).value;
+      this.subscriptionDatas = datas.map(m => {
+        return {
+          id: m.id,
+          changeType: m.changeType,
+          expirationDateTime: new Date(m.expirationDateTime),
+          resource: m.resource
+        };
+      });
+    });
+  }
+
+  async updateSubscription(id: string) {
+    const token = await this.msalService.acquireTokenSilent();
+    const header: HttpHeaders = new HttpHeaders().append('Authorization', `Bearer ${token}`);
+
+    const setExpDate = new Date();
+    setExpDate.setHours(setExpDate.getHours() + 3);
+    const setExpDateJson = setExpDate.toJSON();
+
+    const subscription = {
+      expirationDateTime: setExpDateJson
+   };
+
+    this.http.patch(`https://graph.microsoft.com/v1.0/subscriptions/${id}`, subscription , { headers: header }).subscribe(res => {
+      console.log(res);
+      this.getSubscriptionSettings();
+    });
+  }
+
+  async deleteSubscription(id: string) {
+    const token = await this.msalService.acquireTokenSilent();
+    const header: HttpHeaders = new HttpHeaders().append('Authorization', `Bearer ${token}`);
+
+    this.http.delete(`https://graph.microsoft.com/v1.0/subscriptions/${id}`, { headers: header }).subscribe(res => {
+      console.log(res);
+      this.getSubscriptionSettings();
     });
   }
 

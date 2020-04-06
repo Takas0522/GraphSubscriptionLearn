@@ -10,8 +10,45 @@
                 Subscription
             </button>
         </div>
-        <div>
-            有効期限：{{expirationDateTime}}
+        <div class="subsc-list">
+            <table mat-table [dataSource]="subscriptionDatas">
+
+                <ng-container matColumnDef="resource">
+                    <th mat-header-cell *matHeaderCellDef> リソース </th>
+                    <td mat-cell *matCellDef="let element"> {{element.resource}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="changeType">
+                    <th mat-header-cell *matHeaderCellDef> 更新タイプ </th>
+                    <td mat-cell *matCellDef="let element"> {{element.changeType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expirationDateTime">
+                    <th mat-header-cell *matHeaderCellDef> 有効期限 </th>
+                    <td mat-cell *matCellDef="let element"> {{element.expirationDateTime | date: 'yyyy/MM/dd hh:mm:ss'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="update">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-flat-button color="primary" (click)="updateSubscription(element.id)">
+                            更新
+                        </button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-flat-button color="warn" (click)="deleteSubscription(element.id)">
+                            削除
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
         </div>
     </ng-container>
 </div>
