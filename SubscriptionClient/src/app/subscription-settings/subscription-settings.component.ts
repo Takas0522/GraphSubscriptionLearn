@@ -39,7 +39,7 @@ export class SubscriptionSettingsComponent implements OnInit {
 
     const subscription = {
       changeType: 'created,updated',
-      notificationUrl: 'https://webhook-trigger-okawa-test.azurewebsites.net/api/HttpTrigger1?code=UJlAhypIg0RbfO1nv5RNq9t0cUp6udc/AltStmLoUoddaQvhHgjRHw==',
+      notificationUrl: 'https://webhook-trigger-okawa-test.azurewebsites.net/api/Function1?code=MOYxtPJsVgQulzMQvSjFAvVpEyI3MJBZWs9sNltbkoRcBB4x5uoJBw==',
       resource: 'me/events',
       expirationDateTime: setExpDateJson,
       latestSupportedTlsVersion: 'v1_2'
