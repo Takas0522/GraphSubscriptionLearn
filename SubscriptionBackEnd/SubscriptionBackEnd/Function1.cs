@@ -6,14 +6,25 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Utf8Json;
+using SubscriptionBackEnd.Models;
+using SubscriptionBackEnd.Repositories;
+using System.Linq;
 
 namespace SubscriptionBackEnd
 {
-    public static class Function1
+    public class Function1
     {
+        private readonly IGraphRepository _rep;
+        public Function1(
+            IGraphRepository rep
+        )
+        {
+            _rep = rep;
+        }
+
         [FunctionName("Function1")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log
         )
@@ -27,6 +38,15 @@ namespace SubscriptionBackEnd
             }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+
+            var data = JsonSerializer.Deserialize<SubscriptionData>(requestBody);
+            var value = data.Values.First();
+
+            string[] parseData = value.ResourceData.FullId.Split("/");
+            string userId = parseData[1];
+            string eventId = parseData[3];
+
+            var subject = await _rep.GetEventData(eventId, userId);
 
             log.LogInformation(requestBody);
 
