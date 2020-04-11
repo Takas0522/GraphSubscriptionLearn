@@ -7,11 +7,13 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { SubscriptionSettingsComponent } from './subscription-settings/subscription-settings.component';
+import { SubscriptionWatchComponent } from './subscription-watch/subscription-watch.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SubscriptionSettingsComponent
+    SubscriptionSettingsComponent,
+    SubscriptionWatchComponent
   ],
   imports: [
     BrowserModule,

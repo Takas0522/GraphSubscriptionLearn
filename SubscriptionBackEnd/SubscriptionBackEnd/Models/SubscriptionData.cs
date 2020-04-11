@@ -7,7 +7,7 @@ namespace SubscriptionBackEnd.Models
 {
     public class SubscriptionData
     {
-        [DataMember(Name ="value")]
+        [DataMember(Name = "value")]
         public IEnumerable<ValueObject> Values { get; set; }
     }
 

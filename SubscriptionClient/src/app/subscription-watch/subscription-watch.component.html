@@ -1,0 +1,12 @@
+<div class="contents">
+    <mat-list>
+        <div mat-subheader>更新情報</div>
+        <mat-list-item *ngFor="let subscribeEventData of subscribeEventDatas">
+            <div mat-line>
+                {{subscribeEventData.lastModifiedDateTime | date: "yyyy/MM/dd hh:mm:ss"}} に
+                {{subscribeEventData.subject}} が {{subscribeEventData.changeType}} されました。
+            </div>
+            <mat-divider></mat-divider>
+        </mat-list-item>
+    </mat-list>
+</div>
